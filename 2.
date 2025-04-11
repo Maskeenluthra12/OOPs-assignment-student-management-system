@@ -14,10 +14,10 @@ public:
         cin >> name;
         cout << "Enter student ID: ";
         cin >> id;
-        cout << "Enter CGPA (0.0 - 4.0): ";
+        cout << "Enter CGPA (0.0 - 5.0): ";
         cin >> cgpa;
 
-        if (cgpa < 0.0 || cgpa > 4.0) {
+        if (cgpa < 0.0 || cgpa > 5.0) {
             cout << "Invalid CGPA! Setting CGPA to 0.0" << endl;
             cgpa = 0.0;
         }
