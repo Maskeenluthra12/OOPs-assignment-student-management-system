@@ -1,0 +1,46 @@
+#include <iostream>
+using namespace std;
+
+class Student {
+public:
+    string name;
+    string id;
+    float cgpa;
+    string course1;
+    string course2;
+
+    void setInfo() {
+        cout << "Enter student name: ";
+        cin >> name;
+        cout << "Enter student ID: ";
+        cin >> id;
+        cout << "Enter CGPA (0.0 - 4.0): ";
+        cin >> cgpa;
+
+        if (cgpa < 0.0 || cgpa > 4.0) {
+            cout << "Invalid CGPA! Setting CGPA to 0.0" << endl;
+            cgpa = 0.0;
+        }
+
+        cout << "Enter first course: ";
+        cin >> course1;
+        cout << "Enter second course: ";
+        cin >> course2;
+    }
+
+    void displayInfo() {
+        cout << "\n Student Info " << endl;
+        cout << "Name: " << name << endl;
+        cout << "ID: " << id << endl;
+        cout << "CGPA: " << cgpa << endl;
+        cout << "Courses: " << course1 << ", " << course2 << endl;
+    }
+};
+
+int main() {
+    Student s;
+    s.setInfo();
+    s.displayInfo();
+
+    return 0;
+}
