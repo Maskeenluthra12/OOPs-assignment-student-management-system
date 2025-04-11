@@ -1,48 +1,149 @@
-#include <iostream>
+ #include <iostream>
 using namespace std;
 
-
 class Student {
-public:
-    string name;
-    int rollNumber;
-    float cgpa;
+private:
+    string studentName;
+    int studentID;
+    float currentCGPA;
+    string enrolledCourses[10];
+    int totalCourses;
 
-   
-    void input() {
-        cout << "Enter name: ";
-        cin >> name;
-        cout << "Enter roll number: ";
-        cin >> rollNumber;
-        cout << "Enter CGPA: ";
-        cin >> cgpa;
+public:
+    Student() {
+        studentName = "";
+        studentID = 0;
+        currentCGPA = 0.0;
+        totalCourses = 0;
     }
 
-   
-    void display() {
-        cout << "Name: " << name << endl;
-        cout << "Roll Number: " << rollNumber << endl;
-        cout << "CGPA: " << cgpa << endl;
+    Student(string name, int id, float cgpa) {
+        studentName = name;
+        studentID = id;
+        currentCGPA = cgpa;
+        totalCourses = 0;
+    }
+
+    Student(const Student &other) {
+        studentName = other.studentName;
+        studentID = other.studentID;
+        currentCGPA = other.currentCGPA;
+        totalCourses = other.totalCourses;
+        for (int i = 0; i < totalCourses; i++)
+            enrolledCourses[i] = other.enrolledCourses[i];
+    }
+
+    ~Student() {}
+
+    void registerCourse(string courseName) {
+        if (totalCourses < 10) {
+            enrolledCourses[totalCourses++] = courseName;
+        } else {
+            cout << "Cannot register more than 10 courses." << endl;
+        }
+    }
+
+    void setCGPA(float newCGPA) {
+        if (newCGPA >= 0.0 && newCGPA <= 10.0)
+            currentCGPA = newCGPA;
+        else
+            cout << "Invalid CGPA entered!" << endl;
+    }
+
+    void showStudentInfo() const {
+        cout << "Student Name: " << studentName
+             << "\nStudent ID: " << studentID
+             << "\nCGPA: " << currentCGPA
+             << "\nEnrolled Courses: ";
+        for (int i = 0; i < totalCourses; i++)
+            cout << enrolledCourses[i] << " ";
+        cout << "\n";
+    }
+
+    int getStudentID() const {
+        return studentID;
     }
 };
 
+class StudentManager {
+private:
+    Student studentList[100];
+    int studentCount;
+
+public:
+    StudentManager() {
+        studentCount = 0;
+    }
+
+    void addNewStudent(Student newStudent) {
+        if (studentCount < 100) {
+            studentList[studentCount++] = newStudent;
+        } else {
+            cout << "Student limit reached!" << endl;
+        }
+    }
+
+    void findStudentByID(int id) const {
+        for (int i = 0; i < studentCount; i++) {
+            if (studentList[i].getStudentID() == id) {
+                studentList[i].showStudentInfo();
+                return;
+            }
+        }
+        cout << "No student found with ID " << id << ".\n";
+    }
+
+    void listAllStudents() const {
+        for (int i = 0; i < studentCount; i++) {
+            studentList[i].showStudentInfo();
+            cout << "-----------------------\n";
+        }
+    }
+};
 
 int main() {
-    const int SIZE = 2; 
-    Student students[SIZE];
+    StudentManager manager;
+    int totalStudents;
 
-    
-    for (int i = 0; i < SIZE; i++) {
-        cout << "\nEnter details for student " << i + 1 << ":\n";
-        students[i].input();
+    cout << "How many students would you like to enter? ";
+    cin >> totalStudents;
+
+    for (int i = 0; i < totalStudents; i++) {
+        string name;
+        int id;
+        float cgpa;
+        int numCourses;
+        string courseName;
+
+        cout << "\nEnter student's name: ";
+        cin >> name;
+        cout << "Enter student ID: ";
+        cin >> id;
+        cout << "Enter CGPA: ";
+        cin >> cgpa;
+
+        Student tempStudent(name, id, cgpa);
+
+        cout << "How many courses to register? ";
+        cin >> numCourses;
+
+        for (int j = 0; j < numCourses; j++) {
+            cout << "Enter course " << j + 1 << ": ";
+            cin >> courseName;
+            tempStudent.registerCourse(courseName);
+        }
+
+        manager.addNewStudent(tempStudent);
     }
 
-    
-    cout << "\nStudent Records:\n";
-    for (int i = 0; i < SIZE; i++) {
-        cout << "\nStudent " << i + 1 << ":\n";
-        students[i].display();
-    }
+    cout << "\nAll Registered Students:\n";
+    manager.listAllStudents();
+
+    int searchID;
+    cout << "\nEnter student ID to search: ";
+    cin >> searchID;
+    manager.findStudentByID(searchID);
 
     return 0;
 }
+
